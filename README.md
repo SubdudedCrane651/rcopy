@@ -1,1 +1,1 @@
-# rcopy
+A Net 4.5 DOS command line xcopy clone file copier with spinner and percentage copied
