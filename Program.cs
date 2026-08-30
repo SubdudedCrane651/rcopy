@@ -60,7 +60,7 @@ namespace rcopy
 
             try
             {
-                string args2 = argument2.ToLower();
+                string args2 = argument2;
                 if (args2.IndexOf("/y") == 0 || args2.IndexOf("/d") == 0 || args2.IndexOf("/s") == 0)
                 {
                     //if ((argumentlength == 2 && args2.IndexOf("/y") > 0) || (argumentlength == 2 && args2.IndexOf("/d") > 0) ||
@@ -93,7 +93,7 @@ namespace rcopy
                     { argument5 = "/s"; argumentlength = 5; }
                     try
                     {
-                        argument2 = @Left(args2, args2.IndexOf(" "));
+                        argument2 = @Left(args2, args2.IndexOf(" /"));
                     }
                     catch { }
                     argument2 = argument2.Replace("\"", "\\");
@@ -170,9 +170,10 @@ namespace rcopy
 
                     string rootDrive = Path.GetPathRoot(argument2);
                     string rootDrive2 = Path.GetPathRoot(Environment.CurrentDirectory);
+                    //string rootDrive2 = "I:\\";
                     if (rootDrive == "\\")
-                        
-                    { rootDrive = Left(rootDrive2,rootDrive2.Length); norootdrive = true; }
+
+                    { rootDrive = Left(rootDrive2, rootDrive2.Length); norootdrive = true; }
 
                     string getdirectoryname = "";
                     try { getdirectoryname = Mid(Path.GetDirectoryName(@argument2), 0); } catch { getdirectoryname = ""; }
@@ -192,35 +193,42 @@ namespace rcopy
                         DestFilePath = Environment.CurrentDirectory + Sourcefilename;
                     }
                     else
-                    { getdirectoryname = ""; DestFilePath = (argument2 + Sourcefilename).Replace(@"\\",@"\"); }
 
-                    destinationpathname = argument2.Replace(@"\\",@"\");
-
-
-                    Boolean subdirectorories = false;
-
-                    if (argument2.ToLower() == "/s" || argument3.ToLower() == "/s" || argument4.ToLower() == "/s" || argument5.ToLower() == "/s") subdirectorories = true;
-
-                    if (getdirectoryname != "" || subdirectorories)
                     {
-
-                        string DestinationDirectoryName = Path.GetDirectoryName(Mid(DestFilePath, DestFilePath.IndexOf(":")));
-                        string SourcePathName = "";
-
-                        getdirectoryname = DestinationDirectoryName;
-
-                        SourcePathName = Path.GetDirectoryName(@file) + "\\";
-                        int DirectoryPathLength = SourcePathName.Length - SourcePathName.ToLower().IndexOf(getdirectoryname.ToLower());
-                        destinationpathname = Right(SourcePathName, DirectoryPathLength);
-
-
-                        destinationpathname = Path.GetDirectoryName(destinationpathname); if (norootdrive)
+                        getdirectoryname = "";
+                        if (argument2.Length > 4)
+                        { DestFilePath = argument2 + "\\" + Sourcefilename.Replace(@"\\", @"\"); }
+                        else
                         {
-                            DestFilePath = Environment.CurrentDirectory + "\\" + Mid(destinationpathname, 0) + "\\" + Sourcefilename;
+                            DestFilePath = (argument2 + Sourcefilename).Replace(@"\\", @"\");
                         }
-                        else { DestFilePath = rootDrive + Mid(destinationpathname, 0) + "\\" + Sourcefilename; }
-                    }
+                        destinationpathname = argument2.Replace(@"\\", @"\");
 
+
+                        Boolean subdirectorories = false;
+
+                        if (argument2.ToLower() == "/s" || argument3.ToLower() == "/s" || argument4.ToLower() == "/s" || argument5.ToLower() == "/s") subdirectorories = true;
+
+                        if (getdirectoryname != "" || subdirectorories)
+                        {
+
+                            string DestinationDirectoryName = Path.GetDirectoryName(Mid(DestFilePath, DestFilePath.IndexOf(":")));
+                            string SourcePathName = "";
+
+                            getdirectoryname = DestinationDirectoryName;
+
+                            SourcePathName = Path.GetDirectoryName(@file) + "\\";
+                            int DirectoryPathLength = SourcePathName.Length - SourcePathName.ToLower().IndexOf(getdirectoryname.ToLower());
+                            destinationpathname = Right(SourcePathName, DirectoryPathLength);
+
+
+                            destinationpathname = Path.GetDirectoryName(destinationpathname); if (norootdrive)
+                            {
+                                DestFilePath = Environment.CurrentDirectory + "\\" + Mid(destinationpathname, 0) + "\\" + Sourcefilename;
+                            }
+                            else { DestFilePath = rootDrive + Mid(destinationpathname, 0) + "\\" + Sourcefilename; }
+                        }
+                    }
                 }
                 catch { }
 
